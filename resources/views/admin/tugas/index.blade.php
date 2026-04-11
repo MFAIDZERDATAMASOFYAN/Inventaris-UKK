@@ -28,7 +28,7 @@
                     <tr class="text-center">
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Tugas</th>
+                        <th>Laptop</th>
                         <th>Tanggal Mulai</th>
                         <th>Tanggal Selesai</th>
                         <th>
@@ -40,8 +40,8 @@
                     @foreach ($tugas as $item)
                     <tr>
                         <td class="text-center">{{ $loop->iteration}}</td>
-                        <td class="text-center">{{ $item->user->nama}}</td>
-                        <td class="text-center">{{ $item->tugas}}</td>
+                        <td class="text-center">{{ $item->user->nama }}</td>
+                        <td class="text-center">{{ $item->laptop}}</td>
                         <td class="text-center">
                             <span class="badge badge-info">{{ $item->tanggal_mulai }}</span>
                         </td>
@@ -49,13 +49,12 @@
                             <span class="badge badge-info">{{ $item->tanggal_selesai }}</span>
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('useredit', $item->id) }}" class="btn btn-sm btn-warning">
+                            <a href="{{ route('tugasedit', $item->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas about fa-edit"></i>
                             </a>
-                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{ $item->id }}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                            @include('admin/user/modal')
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{ $item->id }}">
+                            <i class="fas fa-trash"></i></button>
+                            @include('admin/tugas/modal')
                         </td>
                     </tr>
                     @endforeach

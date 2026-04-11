@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TugasController;
+// use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
@@ -34,6 +35,13 @@ Route::middleware('checklogin')->group(function () {
 
     Route::get('tugas', [TugasController::class, 'index'])->name('tugas');
     Route::get('tugas/create', [TugasController::class, 'create'])->name('tugascreate');
+    Route::post('tugas/store', [TugasController::class, 'store'])->name('tugasstore');
+    // Route::get('tugas/edit/{id}', [TugasController::class, 'edit'])->name('tugasedit');
+    Route::get('/tugas/{id}/edit', [TugasController::class, 'edit'])->name('tugasedit');
+    Route::put('/tugas/{id}', [TugasController::class, 'update'])->name('tugasupdate');
+    Route::delete('/tugas/{id}', [TugasController::class, 'destroy'])->name('tugasdestroy');
+
+    Route::get('karyawan', [KaryawanController::class, 'index'])->name('karyawan');
 });
 
 

@@ -15,7 +15,7 @@ class TugasController extends Controller
 
         if ($user->jabatan=='Admin'){
             $data = array(
-            'title' => 'Data tugas',
+            'title' => 'Data Laptop',
             'menuadmintugas' => 'active',
             'tugas' => Tugas::with('user')->get(),
         );
@@ -28,45 +28,75 @@ class TugasController extends Controller
             'tugas' => Tugas::with('user')->get(),
         );
 
-        return view('karyawan.tugas.index', $data);
+        return view('admin.tugas.index', $data);
         }
     }
 
     public function create()
-    {
-        $data = array(
-            'title' => 'Tambah Data tugas',
-            'menuatugasuser' => 'active',
-        );
-
-        return view('admin/tugas/create', $data);
-    }
-
+{
+    $users = \App\Models\User::all(); // ambil semua user
+    $data = [
+        'title' => 'Tambah Data Tugas',
+        'users' => $users, // pastikan ini
+    ];
+    return view('admin.tugas.create', $data);
+}
+    // Menyimpan data ke database
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required|unique:users,email',
-            'jabatan' => 'required',
-            'password' => 'required|confirmed|min:8',
-        ], [
-            'nama.required' => 'Nama tidak boleh kosong',
-            'email.required' => 'Email tidak boleh kosong',
-            'email.unique' => 'Email sudah ada',
-            'jabatan.required' => 'Jabatan harus di pilih',
-            'password.required' => 'password tidak boleh kosong',
-            'password.confirmed' => 'password konfirmasi tidak sama',
-            'password.min' => 'password minimal 8 karakter',
-        ]);
+    'user_id' => 'required|exists:users,id',
+    'laptop' => 'required',
+    'tanggal_mulai' => 'required|date',
+    'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+]);
 
-        $user = new Tugas;
-        $user->nama = $request->nama;
-        $user->email = $request->email;
-        $user->jabatan = $request->jabatan;
-        $user->password = Hash::make($request->password);
-        $user->is_tugas = false;
-        $user->save();
+$tugas = new Tugas();
+$tugas->user_id = $request->user_id; // simpan ID user
+$tugas->laptop = $request->laptop;
+$tugas->tanggal_mulai = $request->tanggal_mulai;
+$tugas->tanggal_selesai = $request->tanggal_selesai;
+$tugas->save();
 
-        return redirect()->route('user')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('tugas')->with('success', 'Data berhasil ditambahkan');
     }
+
+    public function edit($id)
+{
+    $tugas = Tugas::findOrFail($id);  // ambil tugas yang mau diedit
+    $users = \App\Models\User::all(); // ambil semua user untuk dropdown
+
+    return view('admin.tugas.edit', [
+        'title' => 'Edit Tugas',
+        'tugas' => $tugas,
+        'users' => $users, // wajib dikirim
+    ]);
+}
+
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'laptop' => 'required',
+        'tanggal_mulai' => 'required|date',
+        'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+    ]);
+
+    $tugas = Tugas::findOrFail($id);
+    $tugas->user_id = $request->user_id;
+    $tugas->laptop = $request->laptop;
+    $tugas->tanggal_mulai = $request->tanggal_mulai;
+    $tugas->tanggal_selesai = $request->tanggal_selesai;
+    $tugas->save();
+
+    return redirect()->route('tugas')->with('success', 'Data tugas berhasil diperbarui');
+}
+
+public function destroy($id)
+{
+    $tugas = Tugas::findOrFail($id);
+    $tugas->delete();
+
+    return redirect()->route('tugas')->with('success', 'Data tugas berhasil dihapus');
+}
 }

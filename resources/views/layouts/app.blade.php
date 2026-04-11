@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>M-Tugas | {{ $title }}</title>
+    <title>M-Inventaris | {{ $title }}</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('sbadmin2/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -37,7 +37,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-tasks"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">M-Tugas</div>
+                <div class="sidebar-brand-text mx-3">Inventaris</div>
             </a>
 
             <!-- Divider -->
@@ -70,7 +70,7 @@
             <li class="nav-item {{ $menuadmintugas ?? '' }}">
                 <a class="nav-link" href="{{ route('tugas') }}">
                     <i class="fas fa-tasks"></i>
-                    <span>Data Tugas</span></a>
+                    <span>Data Laptop</span></a>
             </li>
 
 
@@ -84,7 +84,7 @@
             <li class="nav-item {{ $menukaryawantugas ?? '' }}">
                 <a class="nav-link" href="{{ route('tugas') }}">
                     <i class="fas fa-tasks"></i>
-                    <span>Data Tugas</span></a>
+                    <span>Data Laptop</span></a>
             </li>
             @endif
 

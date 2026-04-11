@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>M-Tugas | Login</title>
+    <title>M-Inventaris | Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('sbadmin2/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -40,7 +40,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">
                                             <i class="fas fa-tasks mr-2"></i>
-                                            M-Tugas | Login
+                                            M-Inventaris | Login
                                         </h1>
                                     </div>
                                     <form class="user" method="POST" action="{{ route('loginProses') }}">
