@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('nama');
             $table->string('laptop');            // kolom laptop
             $table->date('tanggal_mulai');       // tipe date
             $table->date('tanggal_selesai');     // tipe date
             $table->timestamps();
+        });
+
+        Schema::table('tugas', function (Blueprint $table) {
+            $table->string('status')->default('pending');
         });
 
         // Schema::create('sessions', function (Blueprint $table) {

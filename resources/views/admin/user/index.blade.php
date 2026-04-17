@@ -51,21 +51,36 @@
                             <span class="badge badge-dark">{{ $item->jabatan}}</span>
                             @endif
                         </td>
-                        <td class="text-center">
-                            @if ($item->is_tugas == false)
-                            <span class="badge badge-danger">Belum ditugaskan</span>
+                        <!-- <td class="text-center">
+                            @if (auth()->user()->jabatan == 'Karyawan')
+                            <span class="badge badge-danger">Approver</span>
                             @else
-                            <span class="badge badge-success">Sudah ditugaskan</span>
+                            <span class="badge badge-success">Staff</span>
                             @endif
+                        </td> -->
+                        <td class="text-center">
+                            @if($item->last_login && \Carbon\Carbon::parse($item->last_login)->diffInMinutes(now()) < 5)
+                                <span class="badge badge-success">● Online</span>
+                                @else
+                                <span class="badge badge-secondary">
+                                    Last seen {{ \Carbon\Carbon::parse($item->last_login)->diffForHumans() }}
+                                </span>
+                                @endif
                         </td>
                         <td class="text-center">
                             <a href="{{ route('useredit', $item->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas about fa-edit"></i>
                             </a>
-                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{ $item->id }}">
+                            @php
+                            $isOnline = $item->last_login && \Carbon\Carbon::parse($item->last_login)->diffInMinutes(now()) < 5;
+                                @endphp
+
+                                @if(!$isOnline)
+                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{ $item->id }}">
                                 <i class="fas fa-trash"></i>
-                            </button>
-                            @include('admin/user/modal')
+                                </button>
+                                @endif
+                                @include('admin/user/modal')
                         </td>
                     </tr>
                     @endforeach

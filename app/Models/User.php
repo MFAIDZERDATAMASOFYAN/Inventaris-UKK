@@ -22,8 +22,8 @@ class User extends Authenticatable
         'nama',
         'email',
         'jabatan',
-        'is_tugas',
         'password',
+        'last_login',
     ];
 
     public function tugas() {

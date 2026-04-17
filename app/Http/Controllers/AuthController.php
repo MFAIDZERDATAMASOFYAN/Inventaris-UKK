@@ -4,42 +4,56 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
- {
-     public function login()
-     {
-         return view('auth/login');
-     }
+{
+    public function login()
+    {
+        return view('auth/login');
+    }
 
-     public function loginProses(Request $request)
-     {
-         $request->validate([
-             'email' => 'required',
-             'password' => 'required|min:8',
-         ], [
-             'email.required' => 'Email Tidak Boleh Kosong',
-             'password.required' => 'Password Tidak Boleh Kosong',
-             'password.min' => 'Password Minimal 8 Karakter',
-         ]);
+    public function loginProses(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required|min:8',
+        ], [
+            'email.required' => 'Email Tidak Boleh Kosong',
+            'password.required' => 'Password Tidak Boleh Kosong',
+            'password.min' => 'Password Minimal 8 Karakter',
+        ]);
 
-         $data = array(
-             'email' => $request->email,
-             'password' => $request->password,
-         );
+        $data = array(
+            'email' => $request->email,
+            'password' => $request->password,
+        );
 
-         if (Auth::attempt($data)) {
-             return redirect()->route('dashboard')->with('success', 'Anda Berhasil Login');
-         } else {
-             return redirect()->back()->with('error', 'Email atau Password Salah');
-         }
-     }
+        if (Auth::attempt($data)) {
 
-     public function logout()
-     {
-         Auth::logout();
+            $request->session()->regenerate();
 
-         return redirect()->route('login')->with('success', 'Anda Berhasil Logout');
-     }
- }
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            $user->update([
+                'last_login' => now()
+            ]);
+            return redirect()->route('dashboard')->with('success', 'Anda Berhasil Login');
+        } else {
+            return redirect()->back()->with('error', 'Email atau Password Salah');
+        }
+    }
+
+    public function logout()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $user->update([
+            'last_login' => now()->subMinutes(10)
+        ]);
+        Auth::logout();
+
+        return redirect()->route('login')->with('success', 'Anda Berhasil Logout');
+    }
+}
